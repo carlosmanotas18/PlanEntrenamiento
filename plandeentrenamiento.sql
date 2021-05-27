@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-05-2021 a las 20:46:04
+-- Tiempo de generación: 27-05-2021 a las 04:06:14
 -- Versión del servidor: 10.4.19-MariaDB
 -- Versión de PHP: 7.3.28
 
@@ -33,6 +33,14 @@ CREATE TABLE `equipo` (
   `descripcion` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `equipo`
+--
+
+INSERT INTO `equipo` (`id_equipo`, `nombre`, `descripcion`) VALUES
+(1, 'Cucuta Dep', 'Doblemente Glorioso'),
+(2, 'Medellín', 'DIM');
+
 -- --------------------------------------------------------
 
 --
@@ -44,6 +52,21 @@ CREATE TABLE `equipoplan` (
   `id_equipo` int(11) NOT NULL,
   `id_planentrenamiento` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `equipoplan`
+--
+
+INSERT INTO `equipoplan` (`id_equipoplan`, `id_equipo`, `id_planentrenamiento`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 2, 3),
+(4, 2, 9),
+(5, 2, 12),
+(6, 1, 13),
+(7, 1, 14),
+(8, 2, 15),
+(9, 2, 16);
 
 -- --------------------------------------------------------
 
@@ -96,6 +119,23 @@ CREATE TABLE `mesociclo` (
   `id_planentrenamiento` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `mesociclo`
+--
+
+INSERT INTO `mesociclo` (`id_mesociclo`, `id_tipo`, `id_estadomesociclo`, `id_planentrenamiento`) VALUES
+(1, 1, 2, 1),
+(2, 2, 1, 1),
+(3, 1, 1, 2),
+(4, 2, 2, 2),
+(5, 2, 1, 1),
+(6, 1, 1, 9),
+(7, 1, 1, 2),
+(8, 1, 1, 12),
+(9, 1, 1, 15),
+(10, 1, 1, 16),
+(11, 2, 1, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -108,6 +148,21 @@ CREATE TABLE `microciclo` (
   `id_estadomicrociclo` int(11) NOT NULL,
   `id_mesociclo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `microciclo`
+--
+
+INSERT INTO `microciclo` (`id_microciclo`, `nombre`, `id_estadomicrociclo`, `id_mesociclo`) VALUES
+(1, 'microciclo 1', 1, 1),
+(2, 'microciclo 2', 2, 2),
+(3, 'microciclo 3', 1, 3),
+(4, 'microciclo 4', 2, 4),
+(5, 'microciclo 5', 1, 1),
+(6, 'microciclo 6', 1, 4),
+(7, 'Microciclo test', 1, 1),
+(9, 'Microciclo11', 1, 10),
+(10, 'Microciclo22', 2, 10);
 
 -- --------------------------------------------------------
 
@@ -123,6 +178,21 @@ CREATE TABLE `planentrenamiento` (
   `descripcion` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `planentrenamiento`
+--
+
+INSERT INTO `planentrenamiento` (`id_planentrenamiento`, `fechainicio`, `fechafin`, `observaciones`, `descripcion`) VALUES
+(1, '2021-05-22', '2021-05-28', 'observación de prueba 1', 'descripción de prueba 1'),
+(2, '2021-05-24', '2021-06-30', 'Observación de prueba 2', 'Descripción de prueba 2'),
+(3, '2021-05-27', '2021-05-28', 'observación ejemplo', 'descripción ejemplo'),
+(9, '2021-02-03', '2021-03-16', 'Observación prueba 123', 'Descripción prueba 123'),
+(12, '2021-02-03', '2021-03-16', 'Observación prueba video', 'Descripción prueba video'),
+(13, '2021-02-03', '2021-03-16', 'Observación test 1', 'Descripción test 1'),
+(14, '2021-02-03', '2021-03-16', 'Observación test 2', 'Descripción test 2'),
+(15, '2021-02-03', '2021-03-16', 'Observación test 3', 'Descripción test 3'),
+(16, '2021-02-03', '2021-03-16', 'Observación test 12', 'Descripción test 12');
+
 -- --------------------------------------------------------
 
 --
@@ -135,6 +205,15 @@ CREATE TABLE `sesionentrenamiento` (
   `descripcion` varchar(50) NOT NULL,
   `id_microciclo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `sesionentrenamiento`
+--
+
+INSERT INTO `sesionentrenamiento` (`id_sesionentrenamiento`, `nombre`, `descripcion`, `id_microciclo`) VALUES
+(1, 'sesión 1', 'descripción 1', 1),
+(5, 'Sesión test', 'Resistencia', 2),
+(6, 'Sesión 22', 'Aguante', 5);
 
 -- --------------------------------------------------------
 
@@ -254,13 +333,13 @@ ALTER TABLE `tipomesociclo`
 -- AUTO_INCREMENT de la tabla `equipo`
 --
 ALTER TABLE `equipo`
-  MODIFY `id_equipo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_equipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `equipoplan`
 --
 ALTER TABLE `equipoplan`
-  MODIFY `id_equipoplan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_equipoplan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `estadomesociclo`
@@ -278,25 +357,25 @@ ALTER TABLE `estadomicrociclo`
 -- AUTO_INCREMENT de la tabla `mesociclo`
 --
 ALTER TABLE `mesociclo`
-  MODIFY `id_mesociclo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_mesociclo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `microciclo`
 --
 ALTER TABLE `microciclo`
-  MODIFY `id_microciclo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_microciclo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `planentrenamiento`
 --
 ALTER TABLE `planentrenamiento`
-  MODIFY `id_planentrenamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_planentrenamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `sesionentrenamiento`
 --
 ALTER TABLE `sesionentrenamiento`
-  MODIFY `id_sesionentrenamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_sesionentrenamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo`
@@ -336,8 +415,7 @@ ALTER TABLE `mesociclo`
 --
 ALTER TABLE `microciclo`
   ADD CONSTRAINT `FK4qax6x8r4ytutc3wbffcxv8qk` FOREIGN KEY (`id_estadomicrociclo`) REFERENCES `estadomicrociclo` (`id_estadomicrociclo`),
-  ADD CONSTRAINT `microciclo_ibfk_1` FOREIGN KEY (`id_mesociclo`) REFERENCES `mesociclo` (`id_mesociclo`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `microciclo_ibfk_2` FOREIGN KEY (`id_estadomicrociclo`) REFERENCES `estadomicrociclo` (`id_estadomicrociclo`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `microciclo_ibfk_1` FOREIGN KEY (`id_mesociclo`) REFERENCES `mesociclo` (`id_mesociclo`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `sesionentrenamiento`
