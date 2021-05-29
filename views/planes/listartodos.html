@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="plantilla/template :: head">
+</head>
+
+<body>
+	<header th:replace="plantilla/template :: header"></header>
+
+	<div class="container">
+		<h1 th:text="${titulo}"></h1>
+	</div>
+
+	<div class="container">
+		<!--<a class="btn btn-primary btn-sm" th:href="@{/planesentrenamiento/create}"
+			th:text="'Crear Nuevo Plan'" title="Crear Nuevo Plan">
+		</a>	-->
+
+		<table class="table">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Fecha Inicio</th>
+					<th scope="col">Fecha Fin</th>
+					<th scope="col">Observaciones</th>
+					<th scope="col">descripción</th>
+					<th scope="col">Equipo</th>
+					
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="cl:${planes}">
+					<th th:text="${cl.planentrenamiento.id_planentrenamiento}">></th>
+					<th th:text="${cl.planentrenamiento.fechainicio}">></th>
+					<th th:text="${cl.planentrenamiento.fechafin}">></th>
+					<th th:text="${cl.planentrenamiento.observaciones}">></th>
+					<th th:text="${cl.planentrenamiento.descripcion}">></th>
+					<th th:text="${cl.equipo.nombre}">></th>
+				</tr>
+			</tbody>
+		</table>
+		<div class="panel-body">
+			<button class="btn btn-success" onclick="goBack()">&laquo;Regresar</button>
+		</div>
+
+	</div>
+
+	<footer th:replace="plantilla/template :: footer"></footer>
+	<script>
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="plantilla/template :: head">
+</head>
+
+<body>
+	<header th:replace="plantilla/template :: header"></header>
+
+	<div class="container">
+		<h1 th:text="${titulo}"></h1>
+	</div>
+
+	<div class="container">
+
+		<div class="card bg-light">
+
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">tipo</th>
+						<th scope="col">Estado</th>
+						<th scope="col">ID Plan</th>
+						<th scope="col"></th>
+						<th scope="col"></th>
+
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="cl:${mesociclos}">
+						<th th:text="${cl.id_mesociclo}">></th>
+						<th th:text="${cl.tipomesociclo.descripcion}">></th>
+						<th th:text="${cl.estadomesociclo.descripcion}">></th>
+						<th th:text="${cl.planEntrenamiento.id_planentrenamiento}">></th>
+						<th><a class="btn btn-success btn-sm"
+								th:href="@{/microciclos/mostrarByMe/} + ${cl.id_mesociclo}" th:text="'Ver Microciclos'"
+								title="Microciclos">
+						</th>
+						<th><a class="btn btn-primary btn-sm" th:href="@{/microciclos/create/}+${cl.id_mesociclo}"
+								th:text="'Crear Nuevo Microciclo'" title="Crear Nuevo Microciclo"></th>
+					</tr>
+
+					</a>
+
+					</tr>
+				</tbody>
+			</table>
+			<div class="panel-body">
+				<button class="btn btn-success" onclick="goBack()">&laquo;Regresar</button>
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="plantilla/template :: footer"></footer>
+	<script>
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+</body>
+
+</html>
