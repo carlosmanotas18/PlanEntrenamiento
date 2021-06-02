@@ -1,11 +1,6 @@
 package com.microservicio.plandeentrenamiento.controller;
 
-
-
-
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-
 import com.microservicio.plandeentrenamiento.models.entity.EstadoMicrociclo;
-import com.microservicio.plandeentrenamiento.models.entity.Mesociclo;
 import com.microservicio.plandeentrenamiento.models.entity.Microciclo;
-
 import com.microservicio.plandeentrenamiento.models.repository.EstadoMicrocicloRepository;
 import com.microservicio.plandeentrenamiento.models.repository.MesocicloRepository;
 import com.microservicio.plandeentrenamiento.models.repository.MicrocicloRepository;
@@ -44,21 +35,12 @@ public class MicrocicloControllerV {
 	private MicrocicloRepository microRep;
 
 	@GetMapping(value = "mostrarByMe/{id_mesociclo}")
-	public String buscarMicrocicloByPlan(Model model,@PathVariable("id_mesociclo") Long id_mesociclo) {
+	public String mostrarMicrociclosByPlan(Model model,@PathVariable("id_mesociclo") Long id_mesociclo) {
 		
 		model.addAttribute("titulo", "Lista microciclos");
-		model.addAttribute("microciclos", restMicrociclo.buscarMicrocicloByMe(id_mesociclo));
+		model.addAttribute("microciclos", restMicrociclo.listarMicrociclosByMe(id_mesociclo));
 
 		return "/views/microciclos/listarByMe";
-	}
-	
-	
-	@GetMapping(value = "buscarByMe")
-	public String buscarMicrocicloByMe(@Validated @ModelAttribute Mesociclo mesociclo, BindingResult result,
-		 Model model, RedirectAttributes attribute) {
-		
-
-		return "redirect:/microciclos/mostrarByMe/"+mesociclo.getId_mesociclo().toString();
 	}
 	
 	

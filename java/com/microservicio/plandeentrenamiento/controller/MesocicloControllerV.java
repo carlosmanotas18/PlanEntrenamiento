@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.microservicio.plandeentrenamiento.models.entity.EstadoMesociclo;
 import com.microservicio.plandeentrenamiento.models.entity.Mesociclo;
-import com.microservicio.plandeentrenamiento.models.entity.PlanEntrenamiento;
 import com.microservicio.plandeentrenamiento.models.entity.TipoMesociclo;
 import com.microservicio.plandeentrenamiento.models.repository.EstadoMesocicloRepository;
 import com.microservicio.plandeentrenamiento.models.repository.MesocicloRepository;
@@ -45,22 +44,14 @@ public class MesocicloControllerV {
 	private MesocicloRepository mesoRep;
 
 	@GetMapping(value = "mostrarByP/{id_planentrenamiento}")
-	public String buscarMesocicloByPlan(Model model,@PathVariable("id_planentrenamiento") Long id_planentrenamiento) {
+	public String mostrarMesociclosByPlan(Model model,@PathVariable("id_planentrenamiento") Long id_planentrenamiento) {
 		
 		model.addAttribute("titulo", "Lista mesociclos");
-		model.addAttribute("mesociclos", restMesociclo.buscarMesocicloByPlan(id_planentrenamiento));
+		model.addAttribute("mesociclos", restMesociclo.listarMesociclosByPlan(id_planentrenamiento));
 
 		return "/views/mesociclos/listarByP";
 	}
 	
-	
-	@GetMapping(value = "buscarByP")
-	public String buscarMesocicloByPlan(@Validated @ModelAttribute PlanEntrenamiento plan, BindingResult result,
-		 Model model, RedirectAttributes attribute) {
-		
-
-		return "redirect:/mesociclos/mostrarByP/"+plan.getId_planentrenamiento().toString();
-	}
 	
 	@GetMapping("/create/{id_planentrenamiento}")
 	public String crear(Model model,@PathVariable("id_planentrenamiento") Long id_planentrenamiento) {

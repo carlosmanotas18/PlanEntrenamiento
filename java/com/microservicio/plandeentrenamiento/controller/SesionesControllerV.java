@@ -16,10 +16,10 @@ public class SesionesControllerV {
 	private RestSesionEntrenamiento sesionRest;
 	
 	@GetMapping(value = "mostrarByMi/{id_microciclo}")
-	public String buscarSesionByPlan(Model model,@PathVariable("id_microciclo") Long id_microciclo) {
+	public String mostrarSesionesByPlan(Model model,@PathVariable("id_microciclo") Long id_microciclo) {
 		
 		model.addAttribute("titulo", "Lista Sesiones de Entrenamiento");
-		model.addAttribute("sesiones", sesionRest.buscarSesionByMe(id_microciclo));
+		model.addAttribute("sesiones", sesionRest.listarSesionesByMe(id_microciclo));
 
 		return "/views/sesiones/listarByMi";
 	}

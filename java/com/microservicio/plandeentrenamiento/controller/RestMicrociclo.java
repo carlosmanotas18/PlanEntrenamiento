@@ -24,13 +24,13 @@ public class RestMicrociclo {
 
 	
 	@GetMapping
-	public List<Microciclo> getMicrociclo() {
+	public List<Microciclo> listarMicrociclos() {
 		return (List<Microciclo>) MicrocicloRepository.findAll();
 
 	}
 	
 	@RequestMapping(value="{id_microciclo}")
-	public Microciclo getPlanEntrenamientoById(@PathVariable("id_microciclo") Long id_microciclo) {
+	public Microciclo getMicrocicloById(@PathVariable("id_microciclo") Long id_microciclo) {
     Optional <Microciclo> optionalMicrociclo = MicrocicloRepository.findById(id_microciclo);
 	if(optionalMicrociclo.isPresent()) {
 	 return optionalMicrociclo.get();	
@@ -41,7 +41,7 @@ public class RestMicrociclo {
 }
 	
 	@GetMapping(value = "listarByMe/{id_mesociclo}")
-	public List<Microciclo> buscarMicrocicloByMe(@PathVariable("id_mesosciclo") Long id_mesosciclo) {
+	public List<Microciclo> listarMicrociclosByMe(@PathVariable("id_mesosciclo") Long id_mesosciclo) {
 		
 		List<Microciclo> microciclos = (List<Microciclo>) MicrocicloRepository.findAll();
 		List<Microciclo> microciclos2 = new ArrayList<Microciclo>();
@@ -55,7 +55,7 @@ public class RestMicrociclo {
 	}
 	
 	@PostMapping
-	public Microciclo createMicrociclo(@RequestBody Microciclo microciclo) {
+	public Microciclo crearMicrociclo(@RequestBody Microciclo microciclo) {
 		return MicrocicloRepository.save(microciclo);
 	}
 	

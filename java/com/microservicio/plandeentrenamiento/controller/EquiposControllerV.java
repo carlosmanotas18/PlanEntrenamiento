@@ -19,8 +19,8 @@ public class EquiposControllerV {
 	private EquipoRepository equipoRepository;
 
 
-	@GetMapping(value="listar")
-	public String listarEquipos(Model model) {
+	@GetMapping(value="mostrar")
+	public String mostrarEquipos(Model model) {
 		List<Equipo> listadoEquipos = (List<Equipo>) equipoRepository.findAll();
 		model.addAttribute("titulo", "Lista de Equipos");
 		model.addAttribute("equipos", listadoEquipos);

@@ -33,8 +33,8 @@ public class PlanEntControllerV {
 	private EquipoPlanRepository eqPlanRep;
 	
 
-	@GetMapping(value="listar")
-	public String listarEquipos(Model model) {
+	@GetMapping(value="mostrar")
+	public String mostrarTodos(Model model) {
 	
 		List<EquipoPlan> equipoplanes = (List<EquipoPlan>) eqPlanRep.findAll();
 		model.addAttribute("titulo", "Lista de Planes de entrenamiento");
@@ -44,7 +44,7 @@ public class PlanEntControllerV {
 	}
 	
 	@GetMapping("/create/{id_equipo}")
-	public String crear(Model model,@PathVariable("id_equipo") Long id_equipo) {
+	public String crearPlan(Model model,@PathVariable("id_equipo") Long id_equipo) {
 
 		PlanEntrenamiento plan = new PlanEntrenamiento();
 		Long idEquipo=id_equipo;
@@ -61,9 +61,6 @@ public class PlanEntControllerV {
 	@PostMapping("/save/{id_equipo}")
 	public String guardar(@Validated @ModelAttribute PlanEntrenamiento plan, BindingResult result,
 			Model model, RedirectAttributes attribute,@PathVariable("id_equipo") Long id_equipo) {
-		planRepository.save(plan);
-		
-		
 		
         EquipoPlan eqplan= new EquipoPlan(equipoRep.findById(id_equipo).get(),planRepository.findById(plan.getId_planentrenamiento()).get());
 		eqPlanRep.save(eqplan);
@@ -75,10 +72,10 @@ public class PlanEntControllerV {
 	
 	
 	@GetMapping(value = "mostrarByEq/{id_equipo}")
-	public String buscarMesocicloByPlan(Model model,@PathVariable("id_equipo") Long id_equipo) {
+	public String mostrarMesociclosByEq(Model model,@PathVariable("id_equipo") Long id_equipo) {
 		
 		model.addAttribute("titulo", "Lista Planes de Entrenamiento "+equipoRep.findById(id_equipo).get().getNombre());
-		model.addAttribute("planes",restPlan.buscarPlanByEquipo(id_equipo));
+		model.addAttribute("planes",restPlan.listarPlanesByEquipo(id_equipo));
 
 		return "/views/planes/listarByEq";
 	}

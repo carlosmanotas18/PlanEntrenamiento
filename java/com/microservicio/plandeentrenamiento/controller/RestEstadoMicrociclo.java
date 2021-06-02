@@ -21,13 +21,13 @@ public class RestEstadoMicrociclo {
 
 	
 	@GetMapping
-	public List<EstadoMicrociclo> getEstadoMicrociclo() {
+	public List<EstadoMicrociclo> listarEstadosMicrociclo() {
 		return (List<EstadoMicrociclo>) estadoMicrocicloRepository.findAll();
 
 	}
 	
 	@RequestMapping(value="{id_estadoMicrociclo}")
-	public EstadoMicrociclo getPlanEntrenamientoById(@PathVariable("id_estadoMicrociclo") Long id_estadoMicrociclo) {
+	public EstadoMicrociclo getEstadoMicrocicloById(@PathVariable("id_estadoMicrociclo") Long id_estadoMicrociclo) {
     Optional <EstadoMicrociclo> optionalEstadoMicrociclo = estadoMicrocicloRepository.findById(id_estadoMicrociclo);
 	if(optionalEstadoMicrociclo.isPresent()) {
 	 return optionalEstadoMicrociclo.get();	

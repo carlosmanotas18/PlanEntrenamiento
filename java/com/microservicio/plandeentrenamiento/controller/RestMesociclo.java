@@ -29,13 +29,13 @@ public class RestMesociclo {
 	private MesocicloRepository mesocicloRepository;
  
 	@GetMapping
-	public List<Mesociclo> getMesociclo() {
+	public List<Mesociclo> listarMesociclos() {
 		return (List<Mesociclo>) mesocicloRepository.findAll();
 
 	}
 
 	@RequestMapping(value = "{id_mesociclo}")
-	public Mesociclo getPlanEntrenamientoById(@PathVariable("id_mesociclo") Long id_mesociclo) {
+	public Mesociclo getMesocicloById(@PathVariable("id_mesociclo") Long id_mesociclo) {
 		Optional<Mesociclo> optionalMesociclo = mesocicloRepository.findById(id_mesociclo);
 		if (optionalMesociclo.isPresent()) {
 			return optionalMesociclo.get();
@@ -47,7 +47,7 @@ public class RestMesociclo {
 	
 	
 	@GetMapping(value = "listarByP/{id_planentrenamiento}")
-	public List<Mesociclo> buscarMesocicloByPlan(@PathVariable("id_planentrenamiento") Long id_planentrenamiento) {
+	public List<Mesociclo> listarMesociclosByPlan(@PathVariable("id_planentrenamiento") Long id_planentrenamiento) {
 		
 		List<Mesociclo> mesociclos = (List<Mesociclo>) mesocicloRepository.findAll();
 		List<Mesociclo> mesociclos2 = new ArrayList<Mesociclo>();
@@ -63,7 +63,7 @@ public class RestMesociclo {
 	
 
 	@PostMapping
-	public Mesociclo createMesociclo(@RequestBody Mesociclo mesociclo) {
+	public Mesociclo crearMesociclo(@RequestBody Mesociclo mesociclo) {
 		return mesocicloRepository.save(mesociclo);
 	}
 

@@ -20,7 +20,7 @@ public class RestEstadoMesociclo {
 
 	
 	@GetMapping
-	public List<EstadoMesociclo> getEstadoMesociclo() {
+	public List<EstadoMesociclo> listarEstadosMesociclo() {
 		return (List<EstadoMesociclo>) estadoMesocicloRepository.findAll();
 
 	}

@@ -28,7 +28,7 @@ public class RestPlanEntrenamiento {
 
 	
 	@GetMapping
-	public List<PlanEntrenamiento> getPlanEntrenamiento() {
+	public List<PlanEntrenamiento> listarPlanesEntrenamiento() {
 		return (List<PlanEntrenamiento>) planRepository.findAll();
 
 	}
@@ -45,8 +45,7 @@ public class RestPlanEntrenamiento {
 	}
 	
 	@GetMapping(value ="listarByEq/{id_equipo}")
-	public List<PlanEntrenamiento> buscarPlanByEquipo(@PathVariable("id_equipo") Long id_equipo) {
-		
+	public List<PlanEntrenamiento> listarPlanesByEquipo(@PathVariable("id_equipo") Long id_equipo) {
 		
 		List<EquipoPlan> equiposplanes = (List<EquipoPlan>) equipoPlanRep.findAll();
 		List<PlanEntrenamiento> planesR = new ArrayList<PlanEntrenamiento>();
@@ -61,7 +60,7 @@ public class RestPlanEntrenamiento {
 	
 	
 	@PostMapping
-	public PlanEntrenamiento createPlanEntrenamiento(@RequestBody PlanEntrenamiento planEntrenamiento) {
+	public PlanEntrenamiento crearPlanEntrenamiento(@RequestBody PlanEntrenamiento planEntrenamiento) {
 		return planRepository.save(planEntrenamiento);
 	}
 

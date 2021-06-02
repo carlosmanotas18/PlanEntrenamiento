@@ -22,13 +22,13 @@ public class RestTipoMesociclo {
 
 	
 	@GetMapping
-	public List<TipoMesociclo> getTipoMesociclo() {
+	public List<TipoMesociclo> listarTiposMesociclo() {
 		return (List<TipoMesociclo>) TipoMesocicloRepository.findAll();
 
 	}
 	
 	@RequestMapping(value="{id_tipoMesociclo}")
-	public TipoMesociclo getPlanEntrenamientoById(@PathVariable("id_tipoMesociclo") Long id_tipoMesociclo) {
+	public TipoMesociclo getTipoMesocicloById(@PathVariable("id_tipoMesociclo") Long id_tipoMesociclo) {
     Optional <TipoMesociclo> optionalTipoMesociclo = TipoMesocicloRepository.findById(id_tipoMesociclo);
 	if(optionalTipoMesociclo.isPresent()) {
 	 return optionalTipoMesociclo.get();	
@@ -39,7 +39,7 @@ public class RestTipoMesociclo {
 	
 	
 	@PostMapping
-	public TipoMesociclo createTipoMesociclo(@RequestBody TipoMesociclo tipoMesociclo) {
+	public TipoMesociclo crearTipoMesociclo(@RequestBody TipoMesociclo tipoMesociclo) {
 		return TipoMesocicloRepository.save(tipoMesociclo);
 	}
 	

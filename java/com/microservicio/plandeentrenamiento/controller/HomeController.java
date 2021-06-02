@@ -19,7 +19,7 @@ public class HomeController {
 	private EquipoRepository equipoRepository;
 	
 	@GetMapping
-	public String listarEquipos(Model model) {
+	public String mostrarEquipos(Model model) {
 	
 		List<Equipo> listadoEquipos = (List<Equipo>) equipoRepository.findAll();
 		model.addAttribute("titulo", "Lista de Equipos");

@@ -10,13 +10,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/sesionesentrenamiento")
+@RequestMapping("/sesiones")
 public class RestSesionEntrenamiento {
 	
 	
@@ -25,7 +23,7 @@ public class RestSesionEntrenamiento {
 
 	
 	@GetMapping
-	public List<SesionEntrenamiento> getSesionEntrenamiento() {
+	public List<SesionEntrenamiento> listarSesionesEntrenamiento() {
 		return (List<SesionEntrenamiento>) sesionRepository.findAll();
 
 	}
@@ -41,13 +39,10 @@ public class RestSesionEntrenamiento {
 
 	}
 	
-	@PostMapping
-	public SesionEntrenamiento createSesionEntrenamiento(@RequestBody SesionEntrenamiento sesionEntrenamiento) {
-		return sesionRepository.save(sesionEntrenamiento);
-	}
+	
 	
 	@GetMapping(value = "listarByMi/{id_microciclo}")
-	public List<SesionEntrenamiento> buscarSesionByMe(@PathVariable("id_microciclo") Long id_microciclo) {
+	public List<SesionEntrenamiento> listarSesionesByMe(@PathVariable("id_microciclo") Long id_microciclo) {
 		
 		List<SesionEntrenamiento> sesiones = (List<SesionEntrenamiento>) sesionRepository.findAll();
 		List<SesionEntrenamiento> sesiones2 = new ArrayList<SesionEntrenamiento>();
