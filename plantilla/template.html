@@ -11,7 +11,7 @@
 	<header th:fragment="header">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container">
-				<a class="navbar-brand" th:href="@{/equipos/listar}">
+				<a class="navbar-brand" th:href="@{/equipos/mostrar}">
 					<strong>SIMPLAFUT</strong>
 				</a>
 				
@@ -25,10 +25,10 @@
 				<!-- ENLACES DEL MENU -->
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">
-						<li class="nav-item active"><a class="nav-link" th:href="@{/equipos/listar}">EQUIPOS
+						<li class="nav-item active"><a class="nav-link" th:href="@{/equipos/mostrar}">EQUIPOS
 								<span class="sr-only">(current)</span>
 						</a></li>
-						<li class="nav-item"><a class="nav-link"th:href="@{/planesentrenamiento/listar}">Todos los Planes</a></li>
+						<li class="nav-item"><a class="nav-link"th:href="@{/planesentrenamiento/mostrar}">Todos los Planes</a></li>
 					</ul>
 				</div>
 			</div>
@@ -63,7 +63,7 @@
 	<footer th:fragment="footer" class="bg-dark text-center text-white fixed-bottom">
 
 		<div class="container">
-			<p>Copyright Javacode503 &copy; -2019</p>
+			<p>Copyright UFPS &copy; -2021</p>
 		</div>
 
 		<script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
