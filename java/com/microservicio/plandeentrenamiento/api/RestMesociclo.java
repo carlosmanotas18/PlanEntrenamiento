@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.microservicio.plandeentrenamiento.models.entity.Mesociclo;
 import com.microservicio.plandeentrenamiento.models.repository.MesocicloRepository;
 
@@ -67,6 +67,16 @@ public class RestMesociclo {
 	@PostMapping
 	public Mesociclo crearMesociclo(@RequestBody Mesociclo mesociclo) {
 		return mesocicloRepository.save(mesociclo);
+	}
+	
+	//EDITA UN MESOCICLO
+	@PutMapping
+	public Mesociclo editarMesociclo(@RequestBody Mesociclo mesociclo) {
+		if(mesocicloRepository.existsById(mesociclo.getId_mesociclo())) {
+			return mesocicloRepository.save(mesociclo);
+		}else {
+		return null;
+	}
 	}
 
 }

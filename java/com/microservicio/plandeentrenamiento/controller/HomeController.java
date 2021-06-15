@@ -19,6 +19,7 @@ import com.microservicio.plandeentrenamiento.models.entity.EquipoPlan;
 import com.microservicio.plandeentrenamiento.models.entity.PlanEntrenamiento;
 import com.microservicio.plandeentrenamiento.models.repository.EquipoPlanRepository;
 import com.microservicio.plandeentrenamiento.models.repository.PlanRepository;
+import com.microservicio.plandeentrenamiento.api.RestEquipoPlan;
 import com.microservicio.plandeentrenamiento.api.RestMesociclo;
 import com.microservicio.plandeentrenamiento.models.entity.EstadoMesociclo;
 import com.microservicio.plandeentrenamiento.models.entity.Mesociclo;
@@ -40,6 +41,8 @@ public class HomeController {
 	//DECLARACIÓN DE DEPENDENCIA
 	@Autowired
 	private EquipoRepository equipoRep;
+	@Autowired
+	private RestEquipoPlan restEqPlan;
 	@Autowired
 	private PlanRepository planRep;
 	@Autowired
@@ -118,6 +121,37 @@ public class HomeController {
 		return "/views/planes/frmCrearPlan";
 	}
 	
+	//MAPEO DE URL PARA EDITAR UN PLAN DIRECCIONANDO AL FORMULARIO
+	@GetMapping("/planesentrenamiento/edit/{id_plan}")
+	public String editar(Model model,@PathVariable("id_plan") Long id_plan) {
+
+		PlanEntrenamiento plan = planRep.findById(id_plan).get();
+		Long idPlan=id_plan;
+
+		model.addAttribute("titulo", "Formulario: Editar Plan de Entrenamiento");
+		model.addAttribute("plan", plan);
+		model.addAttribute("idPlan", idPlan);
+		model.addAttribute("idEquipo", restEqPlan.buscarEquipoPlanByPlan(id_plan).getEquipo().getId_equipo().toString());
+		System.out.println(restEqPlan.buscarEquipoPlanByPlan(id_plan).getEquipo().getId_equipo().toString());
+
+		return "/views/planes/frmEditarPlan";
+	}
+	
+	//MAPEO DE URL MEDIANTE POST PARA EDITAR EL PLAN
+		@PostMapping("/planesentrenamiento/editar2/{id_equipo}")
+		public String editar2(@Validated @ModelAttribute PlanEntrenamiento plan, BindingResult result,
+				Model model, RedirectAttributes attribute,@PathVariable("id_equipo") Long id_equipo) {
+			
+			//actualizar los datos mediante save del API REST
+			if(planRep.existsById(plan.getId_planentrenamiento())) {planRep.save(plan);}
+			System.out.println("Plan de Entrenamiento editado con exito!");
+			attribute.addFlashAttribute("success", "Plan de Entrenamiento editado con exito!");
+			
+			return "redirect:/planesentrenamiento/mostrarByEq/"+id_equipo;
+		}
+	
+	
+	
     //MAPEO DE URL MEDIANTE POST PARA INSERTAR EL PLAN
 	@PostMapping("/planesentrenamiento/save/{id_equipo}")
 	public String guardar(@Validated @ModelAttribute PlanEntrenamiento plan, BindingResult result,
@@ -134,14 +168,29 @@ public class HomeController {
 		return "redirect:/planesentrenamiento/mostrarByEq/"+id_equipo;
 	}
 	
+	
 	//MOSTRAR LOS PLANES DE ENTRENAMIENTO DE UN EQUIPO POR SU ID
 	@GetMapping(value = "/planesentrenamiento/mostrarByEq/{id_equipo}")
 	public String mostrarMesocicloByPlan(Model model,@PathVariable("id_equipo") Long id_equipo) {
 		
 		model.addAttribute("titulo", "Lista Planes de Entrenamiento "+equipoRep.findById(id_equipo).get().getNombre());
 		model.addAttribute("planes",restPlan.listarPlanesByEquipo(id_equipo));
+		model.addAttribute("id_equipo",id_equipo);
 
 		return "/views/planes/listarByEq";
+	}
+	
+	//ELIMINAR UN PLAN Y SU TABLA ASOCIATIVA AL EQUIPO
+	@GetMapping("/planesentrenamiento/delete/{id_planentrenamiento}")
+	public String eliminarPlan(@Validated @ModelAttribute Microciclo microciclo, BindingResult result,
+			Model model, RedirectAttributes attribute,@PathVariable("id_planentrenamiento") Long id_planentrenamiento) {
+		
+		String idEq= restEqPlan.buscarEquipoPlanByPlan(id_planentrenamiento).getEquipo().getId_equipo().toString();
+		eqPlanRep.delete(restEqPlan.buscarEquipoPlanByPlan(id_planentrenamiento)); 
+		planRep.deleteById(id_planentrenamiento);
+		System.out.println("Plan eliminado con exito!");
+		attribute.addFlashAttribute("success", "Plan eliminado con exito!");
+		return "redirect:/planesentrenamiento/mostrarByEq/"+idEq;
 	}
 	
 	
@@ -154,7 +203,9 @@ public class HomeController {
 		model.addAttribute("titulo", "Lista mesociclos");
 		//Se utliza el método de la apiRest para filtrar los mesociclos
 		model.addAttribute("mesociclos", restMesociclo.listarMesociclosByPlan(id_planentrenamiento));
+		model.addAttribute("id_plan", id_planentrenamiento);
 
+		
 		return "/views/mesociclos/listarByP";
 	}
 	
@@ -177,10 +228,30 @@ public class HomeController {
 
 		return "/views/mesociclos/frmCrearMeso";
 	}
+	
+	//URL QUE REDIRECCIONA AL FORMULARIO DE EDITAR UN MESOCICLO
+		@GetMapping("/mesociclos/edit/{id_mesociclo}")
+		public String editarMesociclo(Model model,@PathVariable("id_mesociclo") Long id_mesociclo) {
+	        
+			Mesociclo mesociclo = mesoRep.findById(id_mesociclo).get();
+			
+			Long id_plan=mesociclo.getPlanEntrenamiento().getId_planentrenamiento();
+			List<EstadoMesociclo> listEstadosMeso = (List<EstadoMesociclo>) estadoMesoRep.findAll(); 
+			List<TipoMesociclo> listTiposMeso =(List<TipoMesociclo>) tipoMesoRep.findAll();
+			
+			model.addAttribute("titulo", "Formulario: Nuevo Mesociclo");
+			model.addAttribute("mesociclo", mesociclo);
+			model.addAttribute("estados", listEstadosMeso);
+			model.addAttribute("tipos", listTiposMeso);
+			model.addAttribute("id_plan", id_plan);
+			
+
+			return "/views/mesociclos/frmEditarMeso";
+		}
 
 	//URL DONDE SE RECIBE EL MESOCICLO DEL FORMULARIO Y SE GUARDA
 	@PostMapping("/mesociclos/save/{id_planentrenamiento}")
-	public String guardar(@Validated @ModelAttribute Mesociclo mesociclo, BindingResult result,
+	public String guardarMesociclo(@Validated @ModelAttribute Mesociclo mesociclo, BindingResult result,
 			Model model, RedirectAttributes attribute,@PathVariable("id_planentrenamiento") Long id_planentrenamiento) {
 		
 		mesociclo.setPlanEntrenamiento(planRep.findById(id_planentrenamiento).get());
@@ -192,6 +263,33 @@ public class HomeController {
 	}
 	
 	
+	//URL DONDE SE EDITA UN MESOCICLO
+		@PostMapping("/mesociclos/editar2/{id_planentrenamiento}")
+		public String editar2Mesociclo(@Validated @ModelAttribute Mesociclo mesociclo, BindingResult result,
+				Model model, RedirectAttributes attribute,@PathVariable("id_planentrenamiento") Long id_planentrenamiento) {
+			
+			if(mesoRep.existsById(mesociclo.getId_mesociclo())) {
+			mesociclo.setPlanEntrenamiento(planRep.findById(id_planentrenamiento).get());
+			mesoRep.save(mesociclo);
+			}
+			
+			System.out.println("Mesociclo editado con exito!");
+			attribute.addFlashAttribute("success", "Mesociclo editado con exito!");
+			return "redirect:/mesociclos/mostrarByP/"+mesociclo.getPlanEntrenamiento().getId_planentrenamiento().toString();
+		}
+	
+	//ELIMINA UN MESOCICLO POR SU ID
+	@GetMapping("/mesociclos/delete/{id_mesociclo}")
+	public String eliminarMesociclo(@Validated @ModelAttribute Microciclo microciclo, BindingResult result,
+			Model model, RedirectAttributes attribute,@PathVariable("id_mesociclo") Long id_mesociclo) {
+		
+		String idPlan = mesoRep.findById(id_mesociclo).get().getPlanEntrenamiento().getId_planentrenamiento().toString();
+		mesoRep.deleteById(id_mesociclo);
+		System.out.println("Mesociclo eliminado con exito!");
+		attribute.addFlashAttribute("success", "Mesociclo eliminado con exito!");
+		return "redirect:/mesociclos/mostrarByP/"+idPlan;
+	}
+	
 	//------------VISTAS MICROCICLOS-----------------
 	
 	//MOSTRAR LOS MICROCICLOS DE UN MESOCICLO POR SU ID
@@ -200,7 +298,7 @@ public class HomeController {
 		
 		model.addAttribute("titulo", "Lista microciclos");
 		model.addAttribute("microciclos", restMicrociclo.listarMicrociclosByMe(id_mesociclo));
-
+		model.addAttribute("id_meso", id_mesociclo);
 		return "/views/microciclos/listarByMe";
 	}
 	
@@ -221,9 +319,41 @@ public class HomeController {
 		return "/views/microciclos/frmCrearMicro";
 	}
 	
+	//URL QUE REDIRECCIONA AL FORMULARIO DE EDITAR UN MICROCICLO
+		@GetMapping("/microciclos/edit/{id_microciclo}")
+		public String editarMicrociclo(Model model,@PathVariable("id_microciclo") Long id_microciclo) {
+	        
+			Microciclo microciclo = microRep.findById(id_microciclo).get();
+			Long id_meso=microciclo.getMesociclo().getId_mesociclo();
+			List<EstadoMicrociclo> listEstadosMicro = (List<EstadoMicrociclo>) estMicrorep.findAll(); 
+			
+			model.addAttribute("titulo", "Formulario: Editar Microciclo");
+			model.addAttribute("microciclo", microciclo);
+			model.addAttribute("estados", listEstadosMicro);
+			model.addAttribute("id_meso", id_meso);
+			
+
+			return "/views/microciclos/frmEditarMicro";
+		}
+		
+		//URL DONDE SE EDITA UN MICROCICLO
+				@PostMapping("/microciclos/editar2/{id_mesociclo}")
+				public String editar2Microciclo(@Validated @ModelAttribute Microciclo microciclo, BindingResult result,
+						Model model, RedirectAttributes attribute,@PathVariable("id_mesociclo") Long id_mesociclo) {
+					
+					if(microRep.existsById(microciclo.getId_microciclo())) {
+						microciclo.setMesociclo(mesoRep.findById(id_mesociclo).get());
+					microRep.save(microciclo);
+					}
+					
+					System.out.println("Microciclo editado con exito!");
+					attribute.addFlashAttribute("success", "Microciclo editado con exito!");
+					return "redirect:/microciclos/mostrarByMe/"+id_mesociclo.toString();
+				}
+	
 	//URL DONDE SE RECIBE EL MICROCICLO DEL FORMULARIO Y SE GUARDA
 	@PostMapping("/microciclos/save/{id_mesociclo}")
-	public String guardar(@Validated @ModelAttribute Microciclo microciclo, BindingResult result,
+	public String guardarMicrociclo(@Validated @ModelAttribute Microciclo microciclo, BindingResult result,
 			Model model, RedirectAttributes attribute,@PathVariable("id_mesociclo") Long id_mesociclo) {
 		
 		microciclo.setMesociclo(mesoRep.findById(id_mesociclo).get());
@@ -232,6 +362,18 @@ public class HomeController {
 		System.out.println("Microciclo guardado con exito!");
 		attribute.addFlashAttribute("success", "Microciclo guardado con exito!");
 		return "redirect:/microciclos/mostrarByMe/"+microciclo.getMesociclo().getId_mesociclo().toString();
+	}
+	
+//ELIMINA UN MICROCICLO POR SU ID
+	@GetMapping("/microciclos/delete/{id_microciclo}")
+	public String eliminar(@Validated @ModelAttribute Microciclo microciclo, BindingResult result,
+			Model model, RedirectAttributes attribute,@PathVariable("id_microciclo") Long id_microciclo) {
+		
+		String idMeso = microRep.findById(id_microciclo).get().getMesociclo().getId_mesociclo().toString();
+		microRep.deleteById(id_microciclo);
+		System.out.println("Microciclo eliminado con exito!");
+		attribute.addFlashAttribute("success", "Microciclo eliminado con exito!");
+		return "redirect:/microciclos/mostrarByMe/"+idMeso;
 	}
 	
 	
