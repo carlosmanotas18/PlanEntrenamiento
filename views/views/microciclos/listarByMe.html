@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="plantilla/template :: head">
+</head>
+
+<body>
+	<header th:replace="plantilla/template :: header"></header>
+
+	<div class="container">
+		<h1 th:text="${titulo}"></h1>
+	</div>
+
+	<div class="container">
+	
+    <div class="card bg-light">
+   
+            <div class="panel-body">
+				<button class="btn btn-success" onclick="goBack()">&laquo;Regresar</button>
+            
+					
+				
+			
+		<table class="table">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Nombre</th>
+					<th scope="col">Estado</th>
+					<th scope="col">ID Mesociclo</th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+	
+					<th scope="col"><a class="btn btn-primary btn-sm" th:href="@{/microciclos/create/} + ${id_meso}" th:text="'Crear Microciclo'"
+			title="Crear"></th>
+					
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="cl:${microciclos}">
+					<th th:text="${cl.id_microciclo}">></th>
+					<th th:text="${cl.nombre}">></th>
+					<th th:text="${cl.estadomicrociclo.descripcion}">></th>
+					<th th:text="${cl.mesociclo.id_mesociclo}">></th>
+					<th></th>
+					<th><a class="btn btn-success btn-sm"
+								th:href="@{/sesiones/mostrarByMi/} + ${cl.id_microciclo}" th:text="'Ver Sesiones'"
+								title="Sesiones">
+					</th>
+					
+					<th><a class="btn btn-danger btn-sm"
+								th:href="@{/microciclos/delete/} + ${cl.id_microciclo}" th:text="'Eliminar'"
+								title="Eliminar">
+					</th>
+					<th><a class="btn btn-warning btn-sm"
+								th:href="@{/microciclos/edit/} + ${cl.id_microciclo}" th:text="'Editar'"
+								title="Editar">
+					    </th>
+					    
+				</tr>
+				
+			</tbody>
+		</table>
+     
+    </div>
+	</div>
+	
+	<footer th:replace="plantilla/template :: footer"></footer>
+	<script>
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+</body>
+
+</html>
